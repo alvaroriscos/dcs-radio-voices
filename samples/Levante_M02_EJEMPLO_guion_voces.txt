@@ -1,0 +1,198 @@
+# =====================================================================
+# CAMPAÑA LEVANTE · MISIÓN 02 (EJEMPLO INVENTADO) · "FIRST LIGHT"
+# Guion de voces para la app de audio (un .ogg continuo, 2 s entre líneas)
+# =====================================================================
+# FORMATO DE CADA LÍNEA:
+#   HABLANTE NNN (tono) [EFECTO] ~duración_estimada : texto en inglés
+# - Numeración NNN global y única en toda la misión (sirve para nombrar
+#   los .ogg al cortar: "HABLANTE NNN palabra Ns.ogg").
+# - Efectos: [AIR] radio aire-aire · [GROUND] personal de tierra ·
+#   [TOWER] controlador/ATIS · [CLEAN] sin efecto · [STRESS] radio con estrés.
+# - Las líneas de PLAYER son las pregrabadas del menú F10.
+# - Todo en orden cronológico exacto. Los números van deletreados
+#   (estilo radio) para que la voz los lea bien.
+#
+# HABLANTES (voces recurrentes marcadas con *):
+#   PLAYER*  = Talud One-One (piloto, líder, jugador)
+#   WING*    = Talud One-Two (ala, joven y espontáneo)
+#   ATIS     = Rene Mouawad Information (plano)
+#   GROUND   = Rene Mouawad Ground
+#   TOWER    = Rene Mouawad Tower
+#   DEP      = Beirut Departure/Arrival (procedimental)
+#   ATALAYA* = Atalaya Control, JOC de la misión (frío y conciso)
+#   LOBO6    = jefe de sección en tierra en la LZ (cansado, tenso)
+#   MEDIC    = sanitario en la LZ (urgente)
+#   TOWER2   = Rene Mouawad Tower en el regreso (misma voz que TOWER)
+#
+# DATOS INVENTADOS DE LA MISIÓN (ajustar en el .miz):
+#   Aeronaves: 2 x AS532 Cougar · Indicativo flight: TALUD (11 y 12)
+#   Inicio: 06:30 local (03:30Z) · Viento desde 270/08 kt (en el .miz: 090)
+#   QNH 1014 · T 22 / Td 11 · Few 4000 ft · Vis 10 km+
+#   Misión: transporte de 8 pax + carga ligera a FOB Atalaya (LZ "Pelícano"),
+#           incidente en la LZ (herido) y regreso.
+#   Presets (kneeboard):
+#     PRI 1 UHF 251.000 Atalaya Control (misión)
+#     PRI 2 UHF 277.000 ATIS
+#     PRI 3 UHF 250.100 Tower
+#     PRI 4 UHF 250.300 Ground
+#     PRI 5 UHF 253.500 Departure / Arrival
+#     AUX 1 VHF 143.200 Tactical (flight)
+#     AUX 7 VHF 140.100 Guard / Emergencia
+#   Flags previstos: RAMP_GO, TAXI_GO, TKOF_GO, TRANSIT_GO, LZ_INBOUND,
+#                    LZ_ON_GROUND, CASEVAC_REQ, MANPADS_WARN, RTB_GO, LAND_GO
+#   Menú F10 (respuestas del jugador): "Ready to taxi", "Ready to depart",
+#                    "Ready for pax", "Affirm / Negative", "Request casevac",
+#                    "Frequency changed"
+# =====================================================================
+
+
+== THREAD 01 · ATIS · Rene Mouawad Information · PRI 2 277.000 · S1 · flag RAMP_GO ==
+ATIS 001 (plano, procedimental) [TOWER] ~28s : Rene Mouawad information Sierra. Time zero three three zero zulu. Runway in use two four. Wind two seven zero degrees, eight knots. Visibility ten kilometers or more. Few clouds at four thousand feet. Temperature two two, dew point one one. QNH one zero one four. Helicopter operations on ramp spots Alpha and Bravo, departures via runway heading. Bird activity reported east of the field. Advise on initial contact you have information Sierra.
+
+
+== THREAD 02 · Ramp & start-up · Talud · AUX 1 143.200 · S1 · flag RAMP_GO ==
+PLAYER 002 (firme, tranquilo) [AIR] ~3s : Talud, radio check.
+WING 003 (tranquilo) [AIR] ~2s : Two.
+PLAYER 004 (firme) [AIR] ~5s : Two, copy. Everyone got a good aircraft?
+WING 005 (juvenil, espontáneo) [AIR] ~4s : Two, good aircraft, cargo secured, ready when you are.
+PLAYER 006 (firme) [AIR] ~7s : Roger. Get information Sierra, then push 4 on PRI for taxi. Check in when ready.
+WING 007 (tranquilo) [AIR] ~3s : Two, wilco. Information Sierra, then 4 PRI.
+WING 008 (relajado, irónico) [AIR] ~5s : Lead, two. Passengers are asking if the coffee is included.
+PLAYER 009 (relajado) [AIR] ~4s : Negative. Tell them it is on the return flight.
+WING 010 (divertido) [AIR] ~2s : Two, copy.
+PLAYER 011 (firme) [AIR] ~4s : Talud, ready to taxi on my call.
+
+== THREAD 03 · Ground & Tower departure · PRI 4 / PRI 3 · S2 · flag TAXI_GO ==
+PLAYER 012 (profesional) [AIR] ~4s : Rene Mouawad Ground, Talud One-One, flight of two Cougars.
+GROUND 013 (plano, formal) [GROUND] ~3s : Talud One-One, Ground, go ahead.
+PLAYER 014 (profesional) [AIR] ~7s : Talud One-One, flight of two Cougars, ramp Alpha, information Sierra, request taxi for departure.
+GROUND 015 (plano, formal) [GROUND] ~12s : Talud One-One, Ground, taxi to holding point runway two four via taxiway Charlie, hold short, wind two seven zero at eight, QNH one zero one four.
+PLAYER 016 (profesional) [AIR] ~8s : Taxi holding point runway two four via Charlie, QNH one zero one four, Talud One-One.
+GROUND 017 (plano) [GROUND] ~3s : Talud One-One, readback correct.
+PLAYER 018 (firme) [AIR] ~5s : Talud, rolling. One, rolling.
+WING 019 (tranquilo) [AIR] ~2s : Two, rolling.
+PLAYER 020 (firme) [AIR] ~5s : Talud, push 3 on PRI for tower. Check.
+WING 021 (tranquilo) [AIR] ~2s : Two, up.
+PLAYER 022 (profesional) [AIR] ~6s : Rene Mouawad Tower, Talud One-One, flight of two, holding short runway two four.
+TOWER 023 (plano, formal) [TOWER] ~13s : Talud One-One, Tower, wind two seven zero at eight. Runway two four, cleared for takeoff. After departure, turn left heading three six zero, climb and maintain one thousand five hundred feet, contact Departure on five.
+PLAYER 024 (profesional) [AIR] ~11s : Cleared for takeoff runway two four, left heading three six zero, one thousand five hundred feet, Departure on five. Talud One-One.
+TOWER 025 (plano) [TOWER] ~3s : Readback correct. Good morning.
+PLAYER 026 (firme) [AIR] ~3s : Talud, rolling in position, takeoff.
+WING 027 (tranquilo) [AIR] ~2s : Two, rolling.
+
+== THREAD 04 · Departure · PRI 5 253.500 · S3 · flag TKOF_GO ==
+PLAYER 028 (profesional) [AIR] ~6s : Beirut Departure, Talud One-One, flight of two, passing five hundred feet, heading three six zero.
+DEP 029 (plano, procedimental) [TOWER] ~11s : Talud One-One, Beirut Departure, radar contact. Climb and maintain two thousand five hundred feet, proceed direct waypoint Alfa, squawk four two one seven.
+PLAYER 030 (profesional) [AIR] ~10s : Two thousand five hundred feet, direct Alfa, squawk four two one seven, Talud One-One.
+DEP 031 (plano) [TOWER] ~6s : Talud One-One, traffic twelve o'clock, five miles, a Cessna, one thousand feet below.
+PLAYER 032 (profesional) [AIR] ~3s : Negative contact, looking. Talud One-One.
+WING 033 (tranquilo) [AIR] ~4s : Lead, two has the traffic visual, nine o'clock low.
+PLAYER 034 (firme) [AIR] ~4s : Departure, Talud One-One, traffic in sight.
+DEP 035 (plano) [TOWER] ~13s : Talud One-One, thank you. Leaving my area, contact Atalaya Control on PRI 1, good day.
+PLAYER 036 (profesional) [AIR] ~6s : Atalaya Control on PRI 1, Talud One-One. Good day.
+PLAYER 037 (firme) [AIR] ~5s : Talud, push 1 on PRI. Check.
+WING 038 (tranquilo) [AIR] ~2s : Two.
+
+== THREAD 05 · Transit & check-in · Atalaya Control · PRI 1 251.000 · S4 · flag TRANSIT_GO ==
+PLAYER 039 (profesional) [AIR] ~6s : Atalaya Control, Talud One-One, flight of two Cougars, checking in.
+ATALAYA 040 (frío, conciso) [AIR] ~14s : Talud One-One, Atalaya Control, radar contact. Mission is on. Proceed to LZ Pelícano, grid three seven S, Delta Mike, five two one, seven eight four. Cargo drop and personnel off-load. Report five miles inbound.
+PLAYER 041 (profesional) [AIR] ~13s : Atalaya, Talud One-One, copy. LZ Pelícano, grid three seven Sierra, Delta Mike, five two one, seven eight four. Report five miles.
+ATALAYA 042 (frío) [AIR] ~3s : Readback correct.
+PLAYER 043 (firme) [AIR] ~8s : Talud, push 1 on AUX for tactical. Descend and maintain five hundred feet AGL, spread two hundred meters.
+WING 044 (tranquilo) [AIR] ~5s : Two, push 1 AUX, five hundred AGL, spread two hundred.
+WING 045 (juvenil) [AIR] ~5s : Lead, two. Nice view of the valley from here.
+PLAYER 046 (relajado) [AIR] ~5s : Keep your eyes outside, two. Enjoy it later.
+WING 047 (juvenil, avergonzado) [AIR] ~2s : Two, wilco.
+ATALAYA 048 (frío, conciso) [AIR] ~16s : Talud flight, Atalaya. Threat update for the area. Possible MANPADS activity reported south of the LZ, last seen two hours ago. Keep low and fast on approach, break south if you get a launch. Acknowledge.
+PLAYER 049 (firme) [AIR] ~9s : Talud One-One copies MANPADS south of the LZ. Low and fast, break south on launch.
+ATALAYA 050 (frío) [AIR] ~3s : Readback correct. Atalaya out.
+PLAYER 051 (firme) [AIR] ~5s : Talud, check weapons safe, flares armed.
+WING 052 (tranquilo) [AIR] ~3s : Two, safe, flares armed.
+PLAYER 053 (firme) [AIR] ~5s : Talud, fence in.
+WING 054 (tranquilo) [AIR] ~2s : Two, fenced in.
+
+== THREAD 06 · Approach to LZ & off-load · PRI 1 / AUX 1 · S5 · flags LZ_INBOUND, LZ_ON_GROUND ==
+PLAYER 055 (profesional) [AIR] ~5s : Atalaya, Talud One-One, five miles inbound LZ Pelícano.
+ATALAYA 056 (frío) [AIR] ~9s : Talud One-One, Atalaya. Pelícano reports LZ is cold. Switch to Lobo Six on PRI 6 for landing, Atalaya monitoring.
+PLAYER 057 (profesional) [AIR] ~5s : Lobo Six on PRI 6, Talud One-One.
+PLAYER 058 (profesional) [AIR] ~5s : Lobo Six, Talud One-One, flight of two Cougars, five miles inbound.
+LOBO6 059 (cansado, tenso) [GROUND] ~14s : Talud One-One, Lobo Six. LZ is marked with orange panel, wind from west at eight. Land on the panel, rotors turning, off-load on the east side, two minutes on the ground max.
+PLAYER 060 (profesional) [AIR] ~12s : Lobo Six, Talud One-One. Orange panel, rotors turning, off-load east side, two minutes. Talud Two, you are with me, land to the south.
+WING 061 (tranquilo) [AIR] ~3s : Two, land south, I have the panel.
+LOBO6 062 (cansado) [GROUND] ~3s : Talud, cleared to land.
+PLAYER 063 (firme) [AIR] ~4s : Talud One-One, short final, cleared to land.
+PLAYER 064 (firme) [AIR] ~3s : Talud, ready for pax off-load.
+LOBO6 065 (tenso) [GROUND] ~5s : Talud, pax are moving, stand by.
+LOBO6 066 (tenso) [GROUND] ~4s : Cargo is out. Thanks for the lift.
+PLAYER 067 (firme) [AIR] ~4s : Roger, Lobo Six. Talud, check loads out.
+WING 068 (tranquilo) [AIR] ~3s : Two, load clear.
+PLAYER 069 (firme) [AIR] ~3s : One, load clear.
+
+== THREAD 07 · Incident & casevac dilemma · PRI 6 / PRI 1 · S6 · flags MANPADS_WARN, CASEVAC_REQ ==
+LOBO6 070 (urgente, voz tensa) [STRESS] ~9s : Talud, Lobo Six. I have a casualty, gunshot wound, conscious. Request immediate casevac, can you take him?
+PLAYER 071 (profesional) [AIR] ~8s : Lobo Six, Talud One-One, say again the casualty status and the pick-up point.
+MEDIC 072 (urgente, rápido) [STRESS] ~12s : Talud, medic. One casualty, urgent, bleeding controlled, one stretcher. Ready in sixty seconds at your position, east side.
+PLAYER 073 (firme) [AIR] ~8s : Lobo Six, copy. Stand by, requesting authority from Atalaya.
+PLAYER 074 (profesional) [AIR] ~8s : Atalaya, Talud One-One. Pelícano has one urgent casualty, request authorization for casevac to Rene Mouawad.
+ATALAYA 075 (frío) [AIR] ~5s : Talud One-One, Atalaya. Standby.
+WING 076 (nervioso) [STRESS] ~6s : Lead, two. I see smoke on the south ridge, possible launch site.
+ATALAYA 077 (frío, tajante) [AIR] ~13s : Talud One-One, Atalaya. Denied. Mission requires you to return to base immediately due to MANPADS activity. Casevac will be handled by a different aircraft. Confirm.
+
+# ----- DILEMA: el jugador elige en F10 (dos opciones). Se graba cada rama. -----
+# F10 OPCIÓN A: "Affirm - RTB" (flag RTB_GO)
+PLAYER 078A (firme, a disgusto) [AIR] ~7s : Atalaya, Talud One-One, affirm. Returning to base.
+LOBO6 079A (tenso, resignado) [GROUND] ~8s : Talud, Lobo Six. Understood. Hold the stretcher, the other bird is ten minutes out.
+# F10 OPCIÓN B: "Request casevac - override" (flag CASEVAC_REQ)
+PLAYER 078B (firme, insistente) [AIR] ~13s : Atalaya, Talud One-One. Negative. Casualty is urgent, we are on the ground, request casevac override, take full responsibility for the flight.
+ATALAYA 079B (frío, dudando) [AIR] ~10s : Talud One-One, Atalaya. Cleared for casevac. Depart low, break south on any launch. Report airborne.
+MEDIC 080B (urgente) [STRESS] ~5s : Talud, casualty on board, go go go.
+
+# ----- Continúa para ambas ramas -----
+PLAYER 081 (firme) [AIR] ~5s : Talud, lifting now, low and fast, heading three six zero.
+WING 082 (nervioso) [STRESS] ~4s : Two, lifting.
+WING 083 (nervioso) [STRESS] ~5s : Lead, two. Possible launch, six o'clock, low.
+PLAYER 084 (firme, tenso) [STRESS] ~3s : Talud, break right, flares, flares.
+WING 085 (nervioso) [STRESS] ~3s : Two, flares, flares.
+WING 086 (nervioso) [STRESS] ~4s : Missile is going ballistic, no tally on the shooter.
+PLAYER 087 (firme) [STRESS] ~4s : One is clear. Two, status?
+WING 088 (nervioso) [STRESS] ~4s : Two is clear, no damage, I repeat no damage.
+PLAYER 089 (firme, recuperando la calma) [AIR] ~8s : Talud, continue low and fast. Atalaya, Talud One-One, we took a launch, no damage, continuing RTB.
+ATALAYA 090 (frío) [AIR] ~8s : Talud One-One, Atalaya, copy launch, no damage. Altitude your discretion, report ten miles from base.
+
+== THREAD 08 · RTB & arrival · PRI 1 / PRI 5 / PRI 3 · S7 · flags RTB_GO, LAND_GO ==
+PLAYER 091 (profesional) [AIR] ~5s : Talud, climb and maintain two thousand five hundred feet. Fuel check.
+WING 092 (tranquilo) [AIR] ~3s : Two, fuel one point three.
+PLAYER 093 (firme) [AIR] ~3s : One, fuel one point four.
+PLAYER 094 (profesional) [AIR] ~6s : Atalaya, Talud One-One, ten miles from base, request frequency change.
+ATALAYA 095 (frío) [AIR] ~12s : Talud One-One, Atalaya. Radar service terminated, contact Beirut Arrival on PRI 5, good work out there.
+PLAYER 096 (profesional) [AIR] ~5s : Beirut Arrival on PRI 5, Talud One-One.
+PLAYER 097 (firme) [AIR] ~5s : Talud, push 5 on PRI. Check.
+WING 098 (tranquilo) [AIR] ~2s : Two.
+PLAYER 099 (profesional) [AIR] ~8s : Beirut Arrival, Talud One-One, flight of two Cougars, ten miles south, two thousand five hundred feet, information Sierra.
+DEP 100 (plano) [TOWER] ~14s : Talud One-One, Beirut Arrival, radar contact. Descend and maintain one thousand five hundred feet, runway two four, QNH one zero one three, proceed direct to the field, contact Tower on PRI 3.
+PLAYER 101 (profesional) [AIR] ~11s : One thousand five hundred feet, QNH one zero one three, direct field, Tower on three, Talud One-One.
+PLAYER 102 (firme) [AIR] ~5s : Talud, push 3 on PRI. Check.
+WING 103 (tranquilo) [AIR] ~2s : Two.
+PLAYER 104 (profesional) [AIR] ~7s : Rene Mouawad Tower, Talud One-One, flight of two, five miles south, request landing.
+TOWER2 105 (plano, formal) [TOWER] ~14s : Talud One-One, Tower. Runway two four, wind two six zero at six, cleared to land. Medical team is standing by at ramp Alpha, hot taxi authorized.
+PLAYER 106 (profesional) [AIR] ~10s : Cleared to land runway two four, medical team at ramp Alpha, hot taxi. Talud One-One.
+TOWER2 107 (plano) [TOWER] ~3s : Readback correct.
+WING 108 (tranquilo) [AIR] ~5s : Two, cleared to land, I have you in sight.
+PLAYER 109 (firme) [AIR] ~3s : Talud, short final, gear, check.
+WING 110 (tranquilo) [AIR] ~3s : Two, gear down.
+
+== THREAD 09 · Taxi in & shutdown · PRI 3 / PRI 4 · S7 · flag LAND_GO ==
+PLAYER 111 (profesional) [AIR] ~5s : Tower, Talud One-One, clear of the runway, request taxi to ramp.
+TOWER2 112 (plano) [TOWER] ~6s : Talud One-One, switch to Ground on PRI 4.
+GROUND 113 (plano) [GROUND] ~10s : Talud One-One, Ground, taxi to ramp Alpha via Charlie, medical team is waiting.
+PLAYER 114 (profesional) [AIR] ~6s : Taxi to ramp Alpha via Charlie, Talud One-One.
+PLAYER 115 (firme) [AIR] ~4s : Talud, shutdown checklist, report when done.
+WING 116 (tranquilo) [AIR] ~3s : Two, shutdown complete.
+PLAYER 117 (relajado) [AIR] ~6s : Good flight, Talud. Debrief at fifteen hundred in the briefing room.
+WING 118 (relajado, aliviado) [AIR] ~5s : Two, copy. And lead, I expect that coffee now.
+PLAYER 119 (relajado, irónico) [AIR] ~3s : Negative. Next time.
+
+# ========================= FIN DEL GUION =========================
+# Total: 119 líneas (+ ramas A/B del dilema) · duración estimada aprox. 11-12 min de audio
+# Pendiente de comprobar en DCS: disparo de cada hilo por flag, tiempos reales
+# de cada TransmitMessage y comportamiento de la IA.

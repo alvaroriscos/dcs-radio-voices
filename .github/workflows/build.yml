@@ -1,0 +1,111 @@
+name: Construir instalador de Windows
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-build.txt
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-build.txt
+
+      - name: Caché de modelos de voz
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: models-${{ hashFiles('build/piper_voices.json', 'build/model_hashes.json') }}
+
+      - name: Descargar modelos de voz
+        run: python build/download_models.py
+
+      - name: Pruebas unitarias
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: Empaquetar con PyInstaller
+        run: pyinstaller build/DCSRadioVoices.spec --noconfirm --distpath dist --workpath build/work
+
+      - name: Prueba del ejecutable (consola) con el guion de 60 líneas
+        run: |
+          $env:DCSRADIO_SETTINGS_DIR = "$env:RUNNER_TEMP\settings"
+          .\dist\DCSRadioVoices\DCSRadioVoicesCLI.exe samples\prueba_60_lineas.txt "$env:RUNNER_TEMP\out60" --fresh
+          if ($LASTEXITCODE -ne 0) { throw "La generación falló" }
+          python tests\verify_output.py "$env:RUNNER_TEMP\out60" --json "$env:RUNNER_TEMP\verify60.json"
+          if ($LASTEXITCODE -ne 0) { throw "La verificación falló" }
+
+      - name: Prueba del ejecutable con el guion de ejemplo (Levante M02)
+        run: |
+          $env:DCSRADIO_SETTINGS_DIR = "$env:RUNNER_TEMP\settings"
+          .\dist\DCSRadioVoices\DCSRadioVoicesCLI.exe samples\Levante_M02_EJEMPLO_guion_voces.txt "$env:RUNNER_TEMP\outM02" --fresh
+          if ($LASTEXITCODE -ne 0) { throw "La generación falló" }
+          python tests\verify_output.py "$env:RUNNER_TEMP\outM02" --json "$env:RUNNER_TEMP\verifyM02.json"
+          if ($LASTEXITCODE -ne 0) { throw "La verificación falló" }
+
+      - name: Prueba de la ventana (autoprueba con capturas)
+        run: |
+          $env:DCSRADIO_SETTINGS_DIR = "$env:RUNNER_TEMP\settings_gui"
+          $p = Start-Process -FilePath .\dist\DCSRadioVoices\DCSRadioVoices.exe -ArgumentList "--selftest", "$env:RUNNER_TEMP\selftest" -Wait -PassThru
+          Get-Content "$env:RUNNER_TEMP\selftest\selftest.log"
+          if ($p.ExitCode -ne 0) { throw "Autoprueba de la ventana falló ($($p.ExitCode))" }
+
+      - name: Crear instalador (Inno Setup)
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          $ver = (Select-String -Path dcsradio\config.py -Pattern 'APP_VERSION = "(.+)"').Matches[0].Groups[1].Value
+          & $iscc "/DAppVersion=$ver" build\installer.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC falló" }
+          Get-ChildItem dist\*.exe | Format-Table Name, Length
+
+      - name: Probar el instalador (instalación silenciosa y generación)
+        run: |
+          $setup = Get-ChildItem dist\DCSRadioVoices-Setup-*.exe | Select-Object -First 1
+          $dir = "$env:RUNNER_TEMP\instalado"
+          Start-Process -FilePath $setup.FullName -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/DIR=$dir" -Wait
+          $env:DCSRADIO_SETTINGS_DIR = "$env:RUNNER_TEMP\settings_inst"
+          & "$dir\DCSRadioVoicesCLI.exe" samples\ejemplo_enunciado.txt "$env:RUNNER_TEMP\outInst" --fresh
+          if ($LASTEXITCODE -ne 0) { throw "La app instalada falló" }
+          python tests\verify_output.py "$env:RUNNER_TEMP\outInst"
+          if ($LASTEXITCODE -ne 0) { throw "Verificación de la app instalada falló" }
+          Start-Process -FilePath "$dir\unins000.exe" -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES" -Wait
+
+      - name: Guardar resultados de prueba (pequeños)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-prueba
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/verify60.json
+            ${{ runner.temp }}/verifyM02.json
+            ${{ runner.temp }}/selftest/*
+            ${{ runner.temp }}/out60/*.csv
+            ${{ runner.temp }}/outM02/*.csv
+
+      - name: Publicar instalador como Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $setup = Get-ChildItem dist\DCSRadioVoices-Setup-*.exe | Select-Object -First 1
+          $ver = (Select-String -Path dcsradio\config.py -Pattern 'APP_VERSION = "(.+)"').Matches[0].Groups[1].Value
+          $tag = "v$ver-build$env:GITHUB_RUN_NUMBER"
+          gh release create $tag $setup.FullName --title "DCS Radio Voices $ver (build $env:GITHUB_RUN_NUMBER)" --notes "Instalador generado y probado automáticamente en Windows. Commit $env:GITHUB_SHA."

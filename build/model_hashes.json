@@ -1,0 +1,10 @@
+{
+ "kokoro-v1.0.onnx": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+ "voices-v1.0.bin": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+ "piper/en_US-john-medium.onnx": "789c6c875726e627ddee93d51d8727859abe9c091c3d141591f4b83c2072e988",
+ "piper/en_US-bryce-medium.onnx": "dc9caa6c313199ffb5ac698b6e542fa6cba388aeaf2731e25262e33b9810aef1",
+ "piper/en_US-joe-medium.onnx": "abf4b998e34045cbd00eaf050de2de620f81ded6eb8b85a24b022a1c2b3f08d2",
+ "piper/en_US-ryan-medium.onnx": "33b53106e049f68a51f014e4fa10bf5a04e0f7d6668692dc05228cc4554c1d71",
+ "piper/en_GB-northern_english_male-medium.onnx": "41199d55776c142c151e018cf77bea80ca5f01b7b834f81cd781df5b751bf2fb",
+ "piper/en_US-libritts_r-medium.onnx": "10bb85e071d616fcf4071f369f1799d0491492ab3c5d552ec19fb548fac13195"
+}

@@ -1,0 +1,8 @@
+# Dependencias de la aplicación (versiones fijadas y probadas)
+kokoro-onnx==0.6.1
+piper-tts==1.8.0
+onnxruntime==1.32.0
+numpy==2.5.5
+scipy==1.18.1
+soundfile==0.14.0
+PySide6-Essentials==6.12.0

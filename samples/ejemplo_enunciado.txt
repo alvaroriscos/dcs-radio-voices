@@ -1,0 +1,4 @@
+== THREAD: Ramp & start-up · Cougar11 · 143.200 · S1 (flag RAMP_GO) ==
+[01] LEAD   (firm, calm) · 3 s : Cougar, radio check.
+[02] WING 2 (calm)       · 2 s : Two.
+[05] PLAYER (calm)       · 2 s : Four.

@@ -1,0 +1,86 @@
+#  Guion de prueba inventado (60 líneas) con todos los tipos de hablante.
+#  Mezcla a propósito formatos, espacios, mayúsculas, guiones largos/cortos y comentarios.
+// comentario estilo C
+; comentario estilo INI
+
+== THREAD: Ramp & start-up · Cougar11 · 143.200 · S1 (flag RAMP_GO) ==
+[01] LEAD   (firm, calm) · 3 s : Cougar, radio check.
+[02] WING 2 (calm)       · 2 s : Two.
+[03] WING 3 (calm)       – 2 s : Three.
+[04]   player (calm)     — 2 s : Four.
+[05] LEAD (firm) · 6 s : Cougar flight, check in on 143.200, then ATIS on 251.000. {ATIS}
+[06] WING 2 (calm) · 3 s : Two, copy 143.2.
+
+==THREAD 2 — Ground & Tower — PRI 4 / PRI 3==
+GROUND 007 (flat) [GROUND] ~6s : Cougar11, Ground, taxi to runway 09 via Alpha, QNH 1013.
+PLAYER 008 (professional) [AIR] ~5s : Taxi runway 09 via Alpha, QNH 1013, Cougar 1-1.
+TOWER 009 (formal) [TOWER] ~8s : Cougar11, wind 090 at 12, runway 09, cleared for takeoff, climb FL120.
+PLAYER 010 (calm) [AIR] ~5s : Cleared for takeoff runway 09, flight level 120, Cougar11.
+
+== THREAD 03 · Departure / Approach · 253.500 ==
+DEPARTURE 011 (procedural) ~7s : Cougar11, radar contact, climb and maintain 5000 feet, turn right heading 270.
+PLAYER 012 (calm) ~5s : 5000 feet, heading 270, Cougar11.
+APPROACH 013 (flat) ~8s : Cougar11, Approach, descend 2500 ft, squawk 7349, contact Tower on 121.5.
+PLAYER 014 (calm) ~5s : 2500 feet, squawk 7349, Tower on 121.5.
+
+# ---- AWACS y paquete de ataque ----
+== THREAD 04 · AWACS & package · 264.000 ==
+MAGIC 015 (cold, concise) ~9s : Cougar11, Magic, picture, single group, bullseye 090/25, Angels 20, hot.
+PLAYER 016 (firm) ~4s : Magic, Cougar11, copy, Angels 20, hot.
+AWACS 017 (calm) ~8s : All players, Magic, bandits BRA 270/40, Angels 15, cold, time 1430Z.
+ENFIELD 1-1 (calm) 018 ~5s : Magic, Enfield 1-1, checking in, flight of four Hornets, Angels 25.
+SPRINGFIELD21 019 (calm) ~5s : Springfield 2-1 is committing, bullseye 270/15.
+VIPER 1-1 020 (stressed) ~4s : Viper 1-1, spike, three o'clock, defending!
+MAGIC 021 (urgent) ~4s : Viper 1-1, Magic, threat bearing 180, 10 miles, break left!
+VIPER 1-1 022 (stressed, fast) ~3s : Viper 1-1, chaff, flares, notching!
+LEAD 023 (firm) ~4s : Cougar flight, fence in, master arm safe.
+WING 2 024 (calm) ~2s : Two, fenced in.
+
+== THREAD 05 · Tanker · 251.400 ==
+TEXACO 025 (calm) ~6s : Cougar11, Texaco, cleared pre-contact, TACAN 41X, tanker track at FL200.
+TANKER 026 (calm) ~4s : Texaco, cleared contact, fuel flowing.
+PLAYER 027 (calm) ~3s : Cougar11, contact.
+PLAYER 028 (calm) ~5s : Texaco, Cougar11, disconnect, fuel 5.4, thanks for the gas.
+TEXACO 029 (relaxed) ~4s : Good hunting, Cougar.
+
+== THREAD 06 · JTAC & tierra ==
+JTAC 030 (tense) [GROUND] ~9s : Cougar11, Axeman, type 2 control, target grid 37T GG 123 456, elevation 1250 feet.
+PLAYER 031 (firm) ~7s : Grid 37T GG 123 456, elevation 1250 feet, Cougar11.
+JTAC 032 (urgent) [STRESS] ~4s : Cougar11, troops in contact, cleared hot!
+PLAYER 033 (stressed) [STRESS] ~3s : Cougar11, in hot.
+JTAC 034 (relieved) [GROUND] ~4s : Good hits, good hits. BDA to follow.
+
+== THREAD 07 · Tomas alternativas ==
+PLAYER 035 (calm) take A ~3s : Magic, Cougar11, RTB.
+PLAYER 035 (calm) take B ~4s : Magic, Cougar11, returning to base, bingo fuel.
+WING 2 036 (calm) ~2s : Two, RTB.
+WING 2 036 (calm) ~2s : Two, copy, RTB.
+LEAD 037 [CLEAN] (calm) ~3s : Cougar flight, rejoin on me.
+
+== THREAD 08 · Arrival ==
+APPROACH 038 (flat) ~9s : Cougar11, Approach, information Bravo is current, QNH 1009, expect ILS runway 27.
+PLAYER 039 (calm) ~4s : QNH 1009, ILS runway 27, Cougar11.
+TOWER 040 (formal) ~6s : Cougar11, Tower, wind 260 at 6, runway 27, cleared to land.
+PLAYER 041 (calm) ~4s : Cleared to land runway 27, Cougar11.
+GROUND 042 (bored) ~5s : Cougar11, Ground, taxi to parking 19 via Bravo, Charlie.
+PLAYER 043 (calm) ~4s : Parking 19 via Bravo, Charlie, Cougar11.
+
+== THREAD 09 · Varios formatos y números ==
+[44] DEPARTURE   (calm)   ·   6 s   :   Cougar 2-1, frequency change approved, contact 133.75.
+[45] AWACS (calm) · 5 s : Cougar 2-1, Magic, picture clean, 0 contacts.
+[46] TANKER (calm) · 4 s : Shell 1-1 on station, 1500 feet, track Bravo.
+[47] LEAD (calm) · 3 s : Cougar, push 9, check.
+[48] WING 3 (calm) · 2 s : Three.
+[49] HAWG 1-1 (calm) · 4 s : Hawg 1-1, 2 minutes out, 9 line ready.
+[50] SPRINGFIELD21 (calm) · 3 s : Springfield 2-1, 9 o'clock, tally.
+[51] TOWER (calm) · 4 s : All stations, runway 09 closed until 1600Z.
+[52] GROUND (calm) · 3 s : Cougar 1-3, hold position.
+[53] APPROACH (calm) · 5 s : Cougar11, radar service terminated, squawk VFR.
+[54] PLAYER (calm) · 2 s : Roger, Cougar11.
+[55] MAGIC (calm) · 5 s : Magic is RTB, Overlord has the picture on 255.5.
+[56] OVERLORD (calm) · 4 s : Overlord, copy all, good day.
+[57] TEXACO (calm) · 3 s : Texaco departing track, see you.
+[58] LEAD (calm) · 3 s : Cougar flight, good work today.
+[59] WING 2 (excited) · 2 s : Two, great flight!
+[60] PLAYER (relaxed) · 3 s : Four, copy, see you at the bar.
+# fin
