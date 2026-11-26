@@ -178,7 +178,8 @@ def main():
             x16 = resample_poly(x, 160, 441).astype(np.float32)
             segs, _ = model.transcribe(x16, beam_size=5, language="en", condition_on_previous_text=False)
             hyp = " ".join(sg.text for sg in segs).strip()
-            w = wer(r["texto_locutado"], hyp)
+            # se compara con el texto original y con el locutado (con reescrituras fonéticas) y vale el mejor
+            w = min(wer(r["texto_locutado"], hyp), wer(r["texto"], hyp))
             hw = set(norm_words(hyp))
             ref = set(norm_words(r["texto_locutado"])) | set(norm_words(r["texto"]))
             leaked = sorted((hw - ref) & (tags | {"thread", "player", "seconds", "tono", "effect"}))
