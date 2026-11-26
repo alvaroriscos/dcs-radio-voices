@@ -26,6 +26,9 @@ NATO = {
 # Diccionario por defecto (editable por el usuario en la app).
 # Clave: palabra tal como aparece (sensible a mayúsculas si está en mayúsculas).
 DEFAULT_LEXICON: dict[str, str] = {
+    # Nombres en español de las misiones de ejemplo (pronunciación más cercana al original)
+    "Talud": "Tah-lood",
+    "Atalaya": "Ah-tah-lah-ya",
     "PRI": "primary",
     "AUX": "aux",
     "ATIS": "Eight-iss",

@@ -78,7 +78,10 @@ def norm_words(s: str) -> list[str]:
             final.extend(list(w))
         else:
             final.append(w)
-    return final
+    # homófonos que ningún reconocedor distingue: two/to/too, four/for, one/won
+    homo = {"2": "to", "too": "to", "4": "for", "1": "one", "won": "one", "readback": "read", "read": "read"}
+    final = [homo.get(w, w) for w in final]
+    return [w for w in final if w != "back"]
 
 
 def main():

@@ -36,8 +36,8 @@ PROFILES: dict[str, FxParams] = {
     "CLEAN": FxParams(enabled=False, click=False, noise_db=-120, hum_db=-120, squelch_tail=0, pre_key=0),
     "TOWER": FxParams(low_hz=280, high_hz=3500, drive=1.3, compression=0.45, noise_db=-52, hum_db=-75,
                       crackle=0.02, click=True, squelch_tail=0.08, pre_key=0.08),
-    "GROUND": FxParams(low_hz=380, high_hz=3000, drive=2.2, compression=0.6, noise_db=-41, hum_db=-70,
-                       crackle=0.12, dropouts=0.05, click=True, squelch_tail=0.14, pre_key=0.1, bitcrush=0.15),
+    "GROUND": FxParams(low_hz=350, high_hz=3150, drive=1.8, compression=0.6, noise_db=-44, hum_db=-72,
+                       crackle=0.08, dropouts=0.03, click=True, squelch_tail=0.14, pre_key=0.1, bitcrush=0.06),
     "AIR": FxParams(low_hz=320, high_hz=3300, drive=1.9, compression=0.6, noise_db=-43, hum_db=-52,
                     crackle=0.05, click=True, squelch_tail=0.12, pre_key=0.1),
     "STRESS": FxParams(low_hz=360, high_hz=3100, drive=2.6, compression=0.75, noise_db=-35, hum_db=-48,
@@ -68,7 +68,7 @@ def _rms(x):
     return float(np.sqrt(np.mean(np.square(x)) + 1e-12))
 
 
-def trim_silence(x: np.ndarray, sr: int, thresh_db: float = -45, pad: float = 0.03) -> np.ndarray:
+def trim_silence(x: np.ndarray, sr: int, thresh_db: float = -55, pad: float = 0.08) -> np.ndarray:
     if len(x) == 0:
         return x
     win = max(1, int(sr * 0.01))
@@ -77,9 +77,14 @@ def trim_silence(x: np.ndarray, sr: int, thresh_db: float = -45, pad: float = 0.
     idx = np.where(env > peak * db(thresh_db))[0]
     if len(idx) == 0:
         return x
-    a = max(0, idx[0] - int(pad * sr))
-    b = min(len(x), idx[-1] + int(pad * sr))
-    return x[a:b]
+    a = max(0, idx[0] - int(pad * sr))          # margen generoso: no cortar consonantes iniciales (/t/, /k/)
+    b = min(len(x), idx[-1] + int(pad * 0.75 * sr))
+    y = x[a:b].copy()
+    f = min(len(y) // 4, int(0.004 * sr))
+    if f > 0:
+        y[:f] *= np.linspace(0, 1, f)
+        y[-f:] *= np.linspace(1, 0, f)
+    return y
 
 
 def to_sr(x: np.ndarray, sr_in: int, sr_out: int = SR) -> np.ndarray:

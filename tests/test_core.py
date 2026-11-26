@@ -97,7 +97,7 @@ class NormTests(unittest.TestCase):
         self.check("squawk 4219", "squawk four two one niner")
         self.check("Cougar11", "Cougar one one")
         self.check("Enfield 1-1", "Enfield one one")
-        self.check("Talud One-One", "Talud One One")
+        self.check("Talud One-One", "Tah-lood One One")
         self.check("1500 feet", "one thousand five hundred feet")
         self.check("2,500 ft", "two thousand five hundred feet")
         self.check("12000 feet", "one two thousand feet")
