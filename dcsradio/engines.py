@@ -58,7 +58,7 @@ KOKORO_VOICES = {
     "bm_george": ("George", "M", "GB", "C"), "bm_fable": ("Fable", "M", "GB", "C"),
     "bm_lewis": ("Lewis", "M", "GB", "D+"), "bm_daniel": ("Daniel", "M", "GB", "D"),
     "af_heart": ("Heart", "F", "US", "A"), "af_bella": ("Bella", "F", "US", "A-"),
-    "af_nicole": ("Nicole", "F", "US", "B-"), "af_aoede": ("Aoede", "F", "US", "C+"),
+    "af_nicole": ("Nicole, susurrada", "F", "US", "B-"), "af_aoede": ("Aoede", "F", "US", "C+"),
     "af_kore": ("Kore", "F", "US", "C+"), "af_sarah": ("Sarah", "F", "US", "C+"),
     "af_nova": ("Nova", "F", "US", "C"), "af_alloy": ("Alloy", "F", "US", "C"),
     "af_sky": ("Sky", "F", "US", "C-"), "af_jessica": ("Jessica", "F", "US", "D"),

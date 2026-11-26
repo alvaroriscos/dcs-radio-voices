@@ -72,7 +72,7 @@ class Settings:
                         setattr(s, k, v)
             except Exception:
                 pass
-        s.speakers.setdefault("PLAYER", SpeakerSettings(voice=PLAYER_VOICE))
+        s.speakers.setdefault("PLAYER", SpeakerSettings(voice=PLAYER_VOICE, speed=default_speed(PLAYER_VOICE, "PLAYER")))
         if not s.speakers["PLAYER"].voice:
             s.speakers["PLAYER"].voice = PLAYER_VOICE
         return s
@@ -124,7 +124,7 @@ def role_of(speaker: str) -> str:
 # Voces por defecto por rol (en orden de preferencia; se evita repetir voz en un guion).
 # Las listas se eligieron midiendo inteligibilidad con reconocimiento de voz tras el filtro de radio.
 ROLE_POOLS = {
-    "ATC": ["kokoro:bm_george", "kokoro:af_nicole", "piper:en_US-john-medium", "kokoro:bf_emma",
+    "ATC": ["kokoro:bm_george", "kokoro:af_heart", "piper:en_US-john-medium", "kokoro:bf_emma",
             "kokoro:am_puck", "kokoro:af_sarah", "kokoro:bm_fable",
             "kokoro:af_bella"],
     "AWACS": ["kokoro:af_bella", "kokoro:am_fenrir", "kokoro:bm_fable", "kokoro:bf_emma"],
@@ -142,8 +142,70 @@ ROLE_POOLS = {
 }
 FALLBACK_POOL = ["kokoro:am_fenrir", "kokoro:am_puck", "kokoro:bm_george", "kokoro:bm_fable",
                  "kokoro:am_liam", "kokoro:am_eric", "kokoro:am_echo", "kokoro:am_onyx",
-                 "kokoro:bm_lewis", "kokoro:bm_daniel", "kokoro:af_nicole", "kokoro:bf_emma",
+                 "kokoro:bm_lewis", "kokoro:bm_daniel", "kokoro:bf_emma",
                  "kokoro:af_sarah", "kokoro:af_kore", "kokoro:af_aoede", "kokoro:bf_isabella"]
+
+
+# Palabras por segundo medidas para cada voz a velocidad 1.0 (tools: medición propia con dos frases de radio).
+VOICE_RATE = {
+ "kokoro:am_michael": 2.374,
+ "kokoro:am_fenrir": 2.628,
+ "kokoro:am_puck": 2.584,
+ "kokoro:am_echo": 2.808,
+ "kokoro:am_eric": 3.154,
+ "kokoro:am_liam": 3.051,
+ "kokoro:am_onyx": 2.761,
+ "kokoro:am_adam": 2.785,
+ "kokoro:am_santa": 2.489,
+ "kokoro:bm_george": 2.523,
+ "kokoro:bm_fable": 2.711,
+ "kokoro:bm_lewis": 2.503,
+ "kokoro:bm_daniel": 2.934,
+ "kokoro:af_heart": 2.623,
+ "kokoro:af_bella": 2.494,
+ "kokoro:af_nicole": 1.668,
+ "kokoro:af_aoede": 2.743,
+ "kokoro:af_kore": 2.584,
+ "kokoro:af_sarah": 2.7,
+ "kokoro:af_nova": 2.971,
+ "kokoro:af_alloy": 2.888,
+ "kokoro:af_sky": 2.764,
+ "kokoro:af_jessica": 3.206,
+ "kokoro:af_river": 3.136,
+ "kokoro:bf_emma": 2.857,
+ "kokoro:bf_isabella": 2.834,
+ "kokoro:bf_alice": 2.815,
+ "kokoro:bf_lily": 2.859,
+ "piper:en_US-joe-medium": 2.855,
+ "piper:en_US-john-medium": 2.579,
+ "piper:en_US-bryce-medium": 2.118,
+ "piper:en_US-ryan-medium": 2.83,
+ "piper:en_GB-northern_english_male-medium": 3.681,
+ "piper:en_US-libritts_r-medium#55": 3.403,
+ "piper:en_US-libritts_r-medium#104": 3.463,
+ "piper:en_US-libritts_r-medium#117": 3.403,
+ "piper:en_US-libritts_r-medium#231": 3.369,
+ "piper:en_US-libritts_r-medium#286": 3.287,
+ "piper:en_US-libritts_r-medium#291": 3.536,
+ "piper:en_US-libritts_r-medium#264": 4.318,
+ "piper:en_US-libritts_r-medium#212": 3.166,
+ "piper:en_US-libritts_r-medium#220": 3.585,
+ "piper:en_US-libritts_r-medium#29": 3.4,
+ "piper:en_US-libritts_r-medium#23": 3.163,
+ "piper:en_US-libritts_r-medium#73": 3.169,
+ "piper:en_US-libritts_r-medium#108": 3.485,
+ "piper:en_US-libritts_r-medium#354": 3.184
+}
+TARGET_RATE = 2.75          # ritmo de radio objetivo (palabras/s)
+ROLE_TEMPO = {"ATC": 1.05, "AWACS": 1.0, "TANKER": 0.97, "FLIGHT": 1.0, "GROUNDTEAM": 1.0, "EXTERNAL": 1.0,
+              "PLAYER": 1.0}
+
+
+def default_speed(voice: str, role: str) -> float:
+    r = VOICE_RATE.get(voice)
+    sp = TARGET_RATE / r if r else 1.0
+    sp *= ROLE_TEMPO.get(role, 1.0)
+    return round(min(1.18, max(0.9, sp)), 2)
 
 
 def assign_default_voices(settings: Settings, speakers: list[str], available: set[str]) -> list[str]:
@@ -155,7 +217,7 @@ def assign_default_voices(settings: Settings, speakers: list[str], available: se
         if spk in settings.speakers and settings.speakers[spk].voice in available:
             continue
         if spk == "PLAYER":
-            settings.speakers[spk] = SpeakerSettings(voice=PLAYER_VOICE)
+            settings.speakers[spk] = SpeakerSettings(voice=PLAYER_VOICE, speed=default_speed(PLAYER_VOICE, "PLAYER"))
             continue
         b = base_name(spk)
         if b and b != spk and b in settings.speakers and settings.speakers[b].voice in available:
@@ -171,6 +233,6 @@ def assign_default_voices(settings: Settings, speakers: list[str], available: se
             choice = pool[len(used) % len(pool)] if pool else PLAYER_VOICE
             pitch = [-1.5, 1.5, -2.5, 2.5][len(used) % 4]
         used.add(choice)
-        settings.speakers[spk] = SpeakerSettings(voice=choice, pitch=pitch)
+        settings.speakers[spk] = SpeakerSettings(voice=choice, pitch=pitch, speed=default_speed(choice, role))
         new.append(spk)
     return new

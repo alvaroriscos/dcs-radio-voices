@@ -17,12 +17,12 @@ OutputDir=..\dist
 OutputBaseFilename=DCSRadioVoices-Setup-{#AppVersion}
 SetupIconFile=icon.ico
 UninstallDisplayIcon={app}\DCSRadioVoices.exe
-Compression=lzma2/ultra64
+Compression=lzma2/normal
 SolidCompression=yes
 LZMANumBlockThreads=4
 DiskSpanning=no
-ArchitecturesAllowed=x64compatible
-ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed=x64
+ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 ShowLanguageDialog=no
 

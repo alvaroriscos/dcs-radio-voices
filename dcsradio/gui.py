@@ -712,9 +712,9 @@ class MainWindow(QMainWindow):
         if QMessageBox.question(self, APP_NAME, "¿Restablecer las voces de todos los hablantes a los valores por "
                                 "defecto? (PLAYER conserva su voz fija)") != QMessageBox.Yes:
             return
-        self.settings.speakers = {"PLAYER": SpeakerSettings(voice=PLAYER_VOICE)}
-        if self.script:
-            assign_default_voices(self.settings, self.script.speakers, self.avail)
+        self.settings.speakers = {}
+        names = ["PLAYER"] + (list(self.script.speakers) if self.script else []) + self.extra_speakers
+        assign_default_voices(self.settings, list(dict.fromkeys(names)), self.avail)
         self._save()
         self._fill_voices()
         self._refresh_line_effects()

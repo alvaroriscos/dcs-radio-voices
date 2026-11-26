@@ -30,17 +30,55 @@ def wer(ref: str, hyp: str) -> float:
     return d[len(r), len(h)] / max(1, len(r))
 
 
-NUMS = {"0": "zero", "1": "one", "2": "two", "3": "three", "4": "four", "5": "five", "6": "six",
-        "7": "seven", "8": "eight", "9": "nine"}
-EQUIV = {"niner": "nine", "alpha": "alfa", "ok": "okay", "juliet": "juliett", "xray": "x-ray"}
+WORD2D = {"zero": "0", "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6",
+          "seven": "7", "eight": "8", "nine": "9", "niner": "9", "to": "2", "too": "2", "for": "4", "won": "1"}
+EQUIV = {"alpha": "alfa", "ok": "okay", "juliet": "juliett", "xray": "x-ray", "talad": "talud",
+         "eight-iss": "atis", "eightiss": "atis", "a-wacks": "awacs"}
 
 
 def norm_words(s: str) -> list[str]:
-    s = s.lower().replace("-", " ")
-    s = re.sub(r"(\d)", lambda m: " " + NUMS[m.group(1)] + " ", s)
-    s = re.sub(r"[^a-z' ]", " ", s)
-    words = [EQUIV.get(w, w) for w in s.split()]
-    return [w for w in words if w]
+    """Forma canónica para comparar texto locutado y transcripción: números en cifras,
+    siglas letra a letra, sin puntuación."""
+    s = s.lower()
+    s = re.sub(r"(\d),(\d{3})", r"\1\2", s)                 # 5,000 -> 5000
+    s = re.sub(r"(\d)-(\d)", r"\1 \2", s)
+    s = re.sub(r"(\d)-?e?r\b", r"\1", s)                    # 9-er, 1009r -> 9
+    s = s.replace("-", " ")
+    s = re.sub(r"[^a-z0-9' ]", " ", s)
+    toks = [EQUIV.get(w, w) for w in s.split()]
+    out: list[str] = []
+    i = 0
+    while i < len(toks):
+        w = toks[i]
+        # "two thousand five hundred" -> 2500
+        if w in WORD2D and i + 1 < len(toks) and toks[i + 1] in ("thousand", "hundred"):
+            val = int(WORD2D[w]) * (1000 if toks[i + 1] == "thousand" else 100)
+            i += 2
+            if i + 1 < len(toks) and toks[i] in WORD2D and toks[i + 1] == "hundred":
+                val += int(WORD2D[toks[i]]) * 100
+                i += 2
+            out.extend(list(str(val)))
+            continue
+        if w.isdigit():
+            out.extend(list(w))
+        elif w in WORD2D and w not in ("to", "too", "for", "won"):
+            out.append(WORD2D[w])
+        elif w in ("to", "too", "for", "won") and ((out and out[-1].isdigit()) or (
+                i + 1 < len(toks) and (toks[i + 1].isdigit() or toks[i + 1] in WORD2D))):
+            out.append(WORD2D[w])
+        elif len(w) == 1 and w.isalpha():
+            out.append(w)
+        else:
+            out.append(w)
+        i += 1
+    # siglas: "r t b" y "rtb" -> r t b
+    final = []
+    for w in out:
+        if len(w) <= 4 and w.isalpha() and w in ("rtb", "qnh", "ils", "vfr", "bda", "agl", "lz", "iff", "bra"):
+            final.extend(list(w))
+        else:
+            final.append(w)
+    return final
 
 
 def main():

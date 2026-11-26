@@ -161,6 +161,33 @@ def _breath(rng, sr, intensity):
     return (b / (np.abs(b).max() + 1e-9) * 0.18 * intensity).astype(np.float32)
 
 
+TARGET_RMS_DB = -18.0  # sonoridad de la voz (zonas con habla), igual para todas las líneas
+PEAK_DB = -1.0
+
+
+def loudness_normalize(x: np.ndarray, sr: int = SR, target_db: float = TARGET_RMS_DB) -> np.ndarray:
+    """Iguala la sonoridad (RMS de los tramos con voz) y limita picos suavemente a -1 dBFS."""
+    x = x.astype(np.float64)
+    if len(x) == 0 or np.abs(x).max() < 1e-9:
+        return x.astype(np.float32)
+    win = max(1, int(0.02 * sr))
+    n = len(x) // win
+    if n >= 3:
+        fr = np.sqrt(np.mean(x[: n * win].reshape(n, win) ** 2, axis=1))
+        act = fr[fr > fr.max() * db(-30)]
+        rms = float(np.sqrt(np.mean(act ** 2))) if len(act) else _rms(x)
+    else:
+        rms = _rms(x)
+    x = x * (db(target_db) / (rms + 1e-12))
+    t = db(PEAK_DB - 3)
+    lim = db(PEAK_DB)
+    a = np.abs(x)
+    over = a > t
+    if over.any():
+        x[over] = np.sign(x[over]) * (t + (lim - t) * np.tanh((a[over] - t) / (lim - t)))
+    return x.astype(np.float32)
+
+
 def vary(p: FxParams, rng: np.random.Generator) -> FxParams:
     v = p.variation
     if v <= 0:
@@ -188,7 +215,7 @@ def apply_radio(voice: np.ndarray, p: FxParams, seed: int, sr: int = SR) -> np.n
         if fade > 0:
             x[:fade] *= np.linspace(0, 1, fade)
             x[-fade:] *= np.linspace(1, 0, fade)
-        return (x * db(-1) / (np.abs(x).max() + 1e-9)).astype(np.float32)
+        return loudness_normalize(x, sr)
 
     p = vary(p, rng)
     parts = []
@@ -256,5 +283,4 @@ def apply_radio(voice: np.ndarray, p: FxParams, seed: int, sr: int = SR) -> np.n
     fade = int(0.003 * sr)
     out[:fade] *= np.linspace(0, 1, fade)
     out[-fade:] *= np.linspace(1, 0, fade)
-    out = out / (np.abs(out).max() + 1e-9) * db(-1)
-    return out.astype(np.float32)
+    return loudness_normalize(out, sr)

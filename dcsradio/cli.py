@@ -42,8 +42,6 @@ def main(argv=None) -> int:
     s = Settings() if a.fresh else Settings.load()
     if a.fresh:
         s.speakers = {}
-        from .config import SpeakerSettings, PLAYER_VOICE
-        s.speakers["PLAYER"] = SpeakerSettings(voice=PLAYER_VOICE)
     if a.gap is not None:
         s.gap_seconds = a.gap
     if a.no_fx:

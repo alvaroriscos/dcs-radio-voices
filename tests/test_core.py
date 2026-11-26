@@ -109,7 +109,8 @@ class NormTests(unittest.TestCase):
         self.check("fuel 1.3", "fuel one point three")
         self.check("heading 270", "heading two seven zero")
         self.check("QNH 1014", "Q N H one zero one four")
-        self.check("TACAN 41X", "tack-an four one x-ray")
+        self.check("TACAN 41X", "TACAN four one x-ray")
+        self.check("ATIS and AWACS", "Eight-iss and A-wacks")
 
     def test_no_digits_left(self):
         for f in (ROOT / "samples").glob("*.txt"):
